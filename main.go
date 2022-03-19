@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	pkg.Analogi("90915yzze2", "Toyota")
 	bot, err := tgbotapi.NewBotAPI("2018104273:AAEvHzqS3MX9-qei0lnhaXiG5iqS-d6ZmKg")
 	if err != nil {
 		log.Panic(err)
@@ -38,4 +39,3 @@ func main() {
 		bot.Send(msg)
 	}
 }
-
