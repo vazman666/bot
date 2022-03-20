@@ -35,7 +35,7 @@ func Analogi(firm, num string) {
 		Number string
 	}
 
-	var Analogs []Analog
+	var analogs=[]Analog{} 
 	for {
 		feature, err := stream.Recv()
 		if err == io.EOF {
@@ -45,9 +45,9 @@ func Analogi(firm, num string) {
 			log.Fatalf("%v.ListFeatures(_) = _, %v", client, err)
 		}
 		fmt.Printf("Feature: name: %q\n", feature)
-		Analogs = append(Analogs, Analog{Number: feature.Number, Firm: feature.Firm})
+		analogs = append(analogs, Analog{Number: feature.Number, Firm: feature.Firm})
 	}
-	fmt.Printf("Аналоги для %v:  %v\n", rect, Analogs)
+	fmt.Printf("Аналоги для %v:  %v\n",rect, analogs)
 } /*
 func main() {
 	conn, err := grpc.Dial(address, grpc.WithInsecure())

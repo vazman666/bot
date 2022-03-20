@@ -34,6 +34,7 @@ func main() {
 		//log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 		message := "Мытищи: " + strconv.Itoa(a[0].Qtym) + " штук " + a[0].Cellm + "\n Титан: " + strconv.Itoa(a[0].Qtyt) + " штук" + a[0].Cellt + "\n Цена " + a[0].Price + " руб\n"
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, message) // update.Message.Text)
+		pkg.Analogi(a[0].Partnum, a[0].Firm)
 		msg.ReplyToMessageID = update.Message.MessageID
 		log.Printf("msg=%v\n", msg)
 		bot.Send(msg)
