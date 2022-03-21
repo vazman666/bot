@@ -12,3 +12,9 @@ type Sklad struct {
 	Partnum string
 }
 
+type Analog struct {
+	Firm   string
+	Number string
+}
+
+var Analogs []Analog

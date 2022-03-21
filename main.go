@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bot/models"
 	"bot/pkg"
 	"fmt"
 	"log"
@@ -10,7 +11,7 @@ import (
 )
 
 func main() {
-	pkg.Analogi("90915yzze2", "Toyota")
+	//pkg.Analogi("Toyota", "90915yzze2")
 	bot, err := tgbotapi.NewBotAPI("2018104273:AAEvHzqS3MX9-qei0lnhaXiG5iqS-d6ZmKg")
 	if err != nil {
 		log.Panic(err)
@@ -34,9 +35,23 @@ func main() {
 		//log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 		message := "Мытищи: " + strconv.Itoa(a[0].Qtym) + " штук " + a[0].Cellm + "\n Титан: " + strconv.Itoa(a[0].Qtyt) + " штук" + a[0].Cellt + "\n Цена " + a[0].Price + " руб\n"
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, message) // update.Message.Text)
-		pkg.Analogi(a[0].Partnum, a[0].Firm)
 		msg.ReplyToMessageID = update.Message.MessageID
 		log.Printf("msg=%v\n", msg)
 		bot.Send(msg)
+		pkg.Analogi(a[0].Firm, a[0].Partnum)
+		for _, analog := range models.Analogs {
+			a = pkg.SqlReq(analog.Number)
+			fmt.Printf("очередное =%v a=%v\n", analog, a)
+			if a[0].Qtyt != 0 || a[0].Qtym != 0 {
+				fmt.Printf("Такой аналог есть\n")
+				message := analog.Firm + "  " + analog.Number + "\nМытищи: " + strconv.Itoa(a[0].Qtym) + " штук " + a[0].Cellm + "  Титан: " + strconv.Itoa(a[0].Qtyt) + " штук" + a[0].Cellt + "\n Цена " + a[0].Price + " руб\n"
+				msg := tgbotapi.NewMessage(update.Message.Chat.ID, message) // update.Message.Text)
+				msg.ReplyToMessageID = update.Message.MessageID
+				log.Printf("msg=%v\n", msg)
+				bot.Send(msg)
+			}
+
+		}
 	}
 }
+

@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"bot/models"
 	pb "bot/pkg/gen"
 	"context"
 	"fmt"
@@ -13,9 +14,10 @@ import (
 
 const address = "vazman.ru:50051"
 
-//const address = "localhost:50051"
+//const address = "192.168.1.16:50051"
 
 func Analogi(firm, num string) {
+	models.Analogs = models.Analogs[:0]
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -30,12 +32,6 @@ func Analogi(firm, num string) {
 	if err != nil {
 		log.Fatalf("%v.ListFeatures(_) = _, %v", client, err)
 	}
-	type Analog struct {
-		Firm   string
-		Number string
-	}
-
-	var analogs=[]Analog{} 
 	for {
 		feature, err := stream.Recv()
 		if err == io.EOF {
@@ -45,18 +41,8 @@ func Analogi(firm, num string) {
 			log.Fatalf("%v.ListFeatures(_) = _, %v", client, err)
 		}
 		fmt.Printf("Feature: name: %q\n", feature)
-		analogs = append(analogs, Analog{Number: feature.Number, Firm: feature.Firm})
+		models.Analogs = append(models.Analogs, models.Analog{Number: feature.Number, Firm: feature.Firm})
 	}
-	fmt.Printf("Аналоги для %v:  %v\n",rect, analogs)
-} /*
-func main() {
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-	fmt.Println("is connected")
-	defer conn.Close()
-	client := pb.NewSqlRequestClient(conn)
-	printFeatures(client, &pb.Request{Number: "90915yzze2", Firm: "Toyota"})
+	fmt.Printf("Аналоги для %v:  %v\n", rect, models.Analogs)
+}
 
-}*/
